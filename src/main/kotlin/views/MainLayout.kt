@@ -5,10 +5,11 @@ import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasElement
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.router.RouterLayout
-import com.vaadin.flow.theme.lumo.Lumo
+import org.github.nanaki_93.client.SpotifyClient
 
 
 class MainLayout : KComposite(), RouterLayout {
+    private val spotifyClient: SpotifyClient = SpotifyClient()
     private val root = ui {
         verticalLayout {
             horizontalLayout {
@@ -26,12 +27,21 @@ class MainLayout : KComposite(), RouterLayout {
     }
 
     private fun toggleTheme() {
-        getElement().executeJs("document.body.classList.toggle('dark-theme');")
+        spotifyClient.getArtist(spotifyClient.spotifyAccess.value)
     }
 
 
     override fun showRouterLayoutContent(content: HasElement) {
         root.add(content as Component)
         content.isExpand = true
+    }
+
+    init {
+        configObservers()
+        spotifyClient.getAccessToken()
+    }
+
+    private fun configObservers() {
+
     }
 }

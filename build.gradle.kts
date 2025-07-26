@@ -1,13 +1,13 @@
-import org.gradle.internal.classpath.Instrumented.systemProperty
-
 plugins {
     kotlin("jvm") version "2.0.21"
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.0.21"
     id("com.vaadin") version "24.6.4"
     application
 }
 
 group = "org.github.nanaki_93"
 version = "1.0-SNAPSHOT"
+val ktorVersion: String = "3.2.2"
 
 
 repositories {
@@ -31,6 +31,16 @@ dependencies {
 
     // misc
     implementation("org.slf4j:slf4j-simple:2.0.9")
+
+    implementation("io.ktor:ktor-client-core:${ktorVersion}")
+    implementation("io.ktor:ktor-client-cio:${ktorVersion}")
+
+    implementation("io.ktor:ktor-client-content-negotiation:3.0.2")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:3.0.2")
+    implementation("io.ktor:ktor-client-auth:3.0.2")
+
+    implementation("io.ktor:ktor-client-logging:3.0.2")
+
 }
 
 tasks.test {
@@ -48,5 +58,3 @@ kotlin {
 application {
     mainClass.set("kotlin/Main.kt")
 }
-
-
