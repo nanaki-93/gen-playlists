@@ -1,5 +1,6 @@
 package org.github.nanaki_93.client
 
+import com.vaadin.flow.component.UI
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.auth.*
@@ -17,25 +18,46 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.github.nanaki_93.config.SpotifyConfig
-
 import org.github.nanaki_93.model.SpotifyAccess
-import org.github.nanaki_93.util.Observable
+import org.github.nanaki_93.model.SpotifyProfile
+import java.net.URLEncoder
 import kotlin.coroutines.CoroutineContext
 
 
 class SpotifyClient : CoroutineScope {
 
-    var spotifyAccess: Observable<SpotifyAccess> = Observable()
-    var spotifyArtist: Observable<String> = Observable()
 
     private val job = SupervisorJob()
     private val dispatcher = Dispatchers.Default
     override val coroutineContext: CoroutineContext
         get() = job + dispatcher
 
-    fun getAccessToken() {
+
+    companion object {
+        var spotifyAccess: SpotifyAccess? = null
+        var spotifyProfile: SpotifyProfile? = null
+    }
+
+    fun login() {
+        println("login called!")
+
+        // Instead of making an HTTP request, redirect the user's browser
+        val authUrl = "https://accounts.spotify.com/authorize?" +
+                "client_id=${SpotifyConfig.clientId}" +
+                "&response_type=code" +
+                "&redirect_uri=${URLEncoder.encode("http://localhost:8080/callback", "UTF-8")}" +
+                "&scope=${URLEncoder.encode("user-read-private user-read-email", "UTF-8")}"
+
+        // Open the authorization URL in the user's browser
+        UI.getCurrent().page.open(authUrl)
+    }
+
+    fun setAccessToken(authorizationCode: String) {
         launch {
-            spotifyAccess.value = HttpClient {
+
+            println("getAccessToken called!")
+
+            spotifyAccess = HttpClient {
                 install(ContentNegotiation) {
                     json()
                 }
@@ -45,18 +67,27 @@ class SpotifyClient : CoroutineScope {
                     append("Content-Type", "application/x-www-form-urlencoded")
                 }
                 setBody(FormDataContent(Parameters.build {
-                    append("grant_type", "client_credentials")
+                    append("grant_type", "authorization_code")
+                    append("redirect_uri", "http://localhost:8080/callback")
                     append("client_id", SpotifyConfig.clientId)
                     append("client_secret", SpotifyConfig.clientSecret)
+                    append("code", authorizationCode)
                 }))
             }.body()
-        }
 
+            println("access token: ${spotifyAccess?.accessToken}")
+        }
     }
 
-    fun getArtist(spotifyAccess: SpotifyAccess? = null) {
+
+    fun setProfile(spotifyAccess: SpotifyAccess?) {
+
         launch {
+            println("getProfile called! with access token: ${spotifyAccess?.accessToken}")
             val client = HttpClient {
+                install(ContentNegotiation) {
+                    json()
+                }
                 install(Auth) {
                     bearer {
                         loadTokens {
@@ -66,11 +97,7 @@ class SpotifyClient : CoroutineScope {
                 }
             }
 
-            val response = client.get("https://api.spotify.com/v1/artists/4Z8W4fKeB5YxbusRsdQVPb")
-
-            println(response.body<String>())
-            spotifyArtist.value = response.body<String>()
+            spotifyProfile = client.get("https://api.spotify.com/v1/me").body<SpotifyProfile>()
         }
-
     }
 }
