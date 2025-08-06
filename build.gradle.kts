@@ -1,60 +1,27 @@
 plugins {
-    kotlin("jvm") version "2.0.21"
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.0.21"
-    id("com.vaadin") version "24.6.4"
-    application
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.ktor)
+    alias(libs.plugins.kotlin.plugin.serialization)
 }
 
 group = "org.github.nanaki_93"
-version = "1.0-SNAPSHOT"
-val ktorVersion: String = "3.2.2"
+version = "0.0.1"
 
-
-repositories {
-    mavenCentral()
+application {
+    mainClass = "io.ktor.server.netty.EngineMain"
 }
 
 dependencies {
-    // vaadin
-    implementation("com.vaadin:vaadin-core:24.7.2")
-    implementation("com.github.mvysny.vaadin-boot:vaadin-boot:13.3")
-    implementation("com.github.mvysny.karibudsl:karibu-dsl:2.3.2")
+    implementation(libs.ktor.server.content.negotiation)
+    implementation(libs.ktor.server.core)
+    implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.ktor.server.host.common)
+    implementation(libs.ktor.server.netty)
+    implementation(libs.logback.classic)
+    implementation(libs.ktor.server.config.yaml)
+    testImplementation(libs.ktor.server.test.host)
+    testImplementation(libs.kotlin.test.junit)
+    testImplementation(libs.ktor.client.content.negotiation)
+    testImplementation("com.jayway.jsonpath:json-path:2.9.0")
 
-    // exposed
-    implementation("org.jetbrains.exposed:exposed-core:0.61.0")
-    implementation("org.jetbrains.exposed:exposed-java-time:0.61.0")
-    implementation("org.jetbrains.exposed:exposed-jdbc:0.61.0")
-
-    // database
-    implementation("com.zaxxer:HikariCP:6.3.0")
-    implementation("org.postgresql:postgresql:42.7.5")
-
-    // misc
-    implementation("org.slf4j:slf4j-simple:2.0.9")
-
-    implementation("io.ktor:ktor-client-core:${ktorVersion}")
-    implementation("io.ktor:ktor-client-cio:${ktorVersion}")
-
-    implementation("io.ktor:ktor-client-content-negotiation:3.0.2")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:3.0.2")
-    implementation("io.ktor:ktor-client-auth:3.0.2")
-
-    implementation("io.ktor:ktor-client-logging:3.0.2")
-
-}
-
-tasks.test {
-    systemProperty("vaadin.frontend.hotdeploy", "true")
-}
-
-tasks.named<JavaExec>("run") {
-    systemProperty("vaadin.frontend.hotdeploy", "true")
-}
-
-kotlin {
-    jvmToolchain(21)
-}
-
-application {
-    mainClass.set("kotlin/Main.kt")
 }

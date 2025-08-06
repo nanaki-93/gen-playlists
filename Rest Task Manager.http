@@ -1,0 +1,19 @@
+GET http://0.0.0.0:8080/tasks/byPriority/High
+Accept: application/json
+
+
+###
+
+POST http://0.0.0.0:8080/tasks
+Content-Type: application/json
+
+{
+  "name": "ops ",
+  "description": "i did it again",
+  "priority": "High"
+}
+
+
+###
+
+DELETE http://0.0.0.0:8080/tasks/gardening
