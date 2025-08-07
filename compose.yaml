@@ -1,0 +1,9 @@
+services:
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=spotifydb'
+      - 'POSTGRES_PASSWORD=spSecret'
+      - 'POSTGRES_USER=spUser'
+    ports:
+      - '5555:5432'
