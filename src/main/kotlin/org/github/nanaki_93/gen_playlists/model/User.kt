@@ -35,9 +35,10 @@ enum class Role {
     USER, ADMIN
 }
 
+data class ProfileImages(val email: String, val password: String)
 
 // Model for Spotify tokens, with a User relationship
-data class SpotifyToken(
+data class SpotifyUser(
     val id: UUID? = null,
     val user: SecureUser,
     val spotifyId: String,
@@ -67,12 +68,12 @@ class SecureUserRowMapper : RowMapper<SecureUser> {
     }
 }
 
-class SpotifyTokenRowMapper(private val userRepository: UserRepository) : RowMapper<SpotifyToken> {
-    override fun mapRow(rs: ResultSet, rowNum: Int): SpotifyToken {
+class SpotifyTokenRowMapper(private val userRepository: UserRepository) : RowMapper<SpotifyUser> {
+    override fun mapRow(rs: ResultSet, rowNum: Int): SpotifyUser {
         val userId = rs.getObject("user_id", UUID::class.java)
         val user = userRepository.findById(userId) ?: throw IllegalStateException("User not found for spotify token")
 
-        return SpotifyToken(
+        return SpotifyUser(
             id = rs.getObject("spotify_token_id", UUID::class.java),
             user = user,
             spotifyId = rs.getString("spotify_id"),
