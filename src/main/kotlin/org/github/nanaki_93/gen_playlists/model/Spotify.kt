@@ -1,4 +1,3 @@
 package org.github.nanaki_93.gen_playlists.model
 
-class Spotify {
-}
+data class SpotifyAuthCode(val code: String)
