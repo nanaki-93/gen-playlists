@@ -1,24 +1,24 @@
 package org.github.nanaki_93.gen_playlists.repository
 
-import org.github.nanaki_93.gen_playlists.model.SecureUser
-import org.github.nanaki_93.gen_playlists.model.SecureUserRowMapper
+import org.github.nanaki_93.gen_playlists.model.User
+import org.github.nanaki_93.gen_playlists.model.UserRowMapper
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Repository
 import java.util.*
 
 interface UserRepository {
-    fun findByEmail(email: String): SecureUser?
-    fun findById(id: UUID): SecureUser?
-    fun save(user: SecureUser): SecureUser
+    fun findByEmail(email: String): User?
+    fun findById(id: UUID): User?
+    fun save(user: User): User
     fun deleteById(id: UUID): Boolean
 
 }
 
 @Repository
 class JdbcUserRepository(private val jdbcTemplate: JdbcTemplate) : UserRepository {
-    private val rowMapper = SecureUserRowMapper()
+    private val rowMapper = UserRowMapper
 
-    override fun findByEmail(email: String): SecureUser? {
+    override fun findByEmail(email: String): User? {
         val sql = "SELECT user_id, email, password_hash, role, created_at, updated_at FROM users WHERE email = ?"
         return try {
             jdbcTemplate.queryForObject(sql, rowMapper, email)
@@ -27,7 +27,7 @@ class JdbcUserRepository(private val jdbcTemplate: JdbcTemplate) : UserRepositor
         }
     }
 
-    override fun findById(id: UUID): SecureUser? {
+    override fun findById(id: UUID): User? {
         val sql = "SELECT user_id, email, password_hash, role, created_at, updated_at FROM users WHERE user_id = ?"
         return try {
             jdbcTemplate.queryForObject(sql, rowMapper, id)
@@ -36,7 +36,7 @@ class JdbcUserRepository(private val jdbcTemplate: JdbcTemplate) : UserRepositor
         }
     }
 
-    override fun save(user: SecureUser): SecureUser {
+    override fun save(user: User): User {
         val sql = if (user.id == null) {
             // Insert new user
             val newId = UUID.randomUUID()

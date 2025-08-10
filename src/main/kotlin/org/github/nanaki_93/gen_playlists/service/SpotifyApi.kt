@@ -41,7 +41,7 @@ class SpotifyApi(val appProps: ApplicationProperties) {
         println("spotifyUser: $spotifyUser")
         return SpotifyUser(
             id = UUID.randomUUID(),
-            user = SecureUser(
+            user = User(
                 id = UUID.randomUUID(),
                 email = "mail",
                 passwordHash = "",
