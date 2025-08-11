@@ -5,5 +5,7 @@ services:
       - 'POSTGRES_DB=spotifydb'
       - 'POSTGRES_PASSWORD=spSecret'
       - 'POSTGRES_USER=spUser'
+      - 'TZ=Europe/Rome'      # Set the container timezone
+      - 'PGTZ= Europe/Rome'    #
     ports:
       - '5555:5432'

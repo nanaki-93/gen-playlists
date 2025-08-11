@@ -1,83 +1,65 @@
 package org.github.nanaki_93.gen_playlists.service
 
-import org.github.nanaki_93.gen_playlists.config.ApplicationProperties
-import org.github.nanaki_93.gen_playlists.model.*
+import org.github.nanaki_93.gen_playlists.model.Role
+import org.github.nanaki_93.gen_playlists.model.SpotifyAccessRes
+import org.github.nanaki_93.gen_playlists.model.SpotifyProfileRes
+import org.github.nanaki_93.gen_playlists.model.SpotifyUser
+import org.github.nanaki_93.gen_playlists.repository.SpotifyUserRepository
 import org.springframework.http.MediaType
-import org.springframework.stereotype.Service
-import org.springframework.util.LinkedMultiValueMap
-import org.springframework.util.MultiValueMap
 import org.springframework.web.client.RestClient
 import java.time.OffsetDateTime
-import java.util.*
+import java.time.temporal.ChronoUnit
+import java.util.UUID
+import kotlin.text.get
 
-@Service
-class SpotifyApi(val appProps: ApplicationProperties) {
-
-    private val accountClient = RestClient.builder()
-        .baseUrl("https://accounts.spotify.com")
-        .build()
+class SpotifyApi(private val spotifyAuthApi: SpotifyAuthApi, private val spotifyUserRepository: SpotifyUserRepository) {
 
     private val apiClient = RestClient.builder()
         .baseUrl("https://api.spotify.com")
         .build()
 
+    private fun retrieveSpotifyProfile(accessToken: String) = apiClient.get()
+        .uri("/v1/me")
+        .accept(MediaType.APPLICATION_JSON)
+        .header("Authorization", spotifyAuthApi.)
+        .retrieve()
+        .body(SpotifyProfileRes::class.java)
+        ?: error("Empty response from Spotify")
 
-    fun getUser(spotifyAuthCode: SpotifyAuthCode): SpotifyUser {
-        val spotifyAccess = getAccess(spotifyAuthCode)
-        return toUser(spotifyAccess)
+    private fun retrieveSpotifyPlaylist(spotifyUser: SpotifyUser) = apiClient.get()
+        .uri("/v1/users/${spotifyUser.spotifyId}/playlists")
+        .accept(MediaType.APPLICATION_JSON)
+        .header("Authorization", "Bearer ${spotifyUser.accessToken}")
+        .retrieve()
+        .body(String::class.java)
+        ?: error("Empty response from Spotify")
+
+
+    private fun toSpotifyUser(spotifyAccessRes: SpotifyAccessRes): SpotifyUser {
+        //todo Register and Login with different logics
+        val spotifyProfile = retrieveSpotifyProfile(spotifyAccessRes.accessToken)
+        val oldUser = spotifyUserRepository.findBySpotifyId(spotifyProfile.id)
+        val spotifyUser = mapToSpotifyUser(spotifyAccessRes, spotifyProfile, oldUser?.id)
+
+        spotifyUserRepository.save(spotifyUser)
+        return spotifyUser
     }
 
-    private fun toUser(spotifyAccess: SpotifyAccess): SpotifyUser {
-
-        println("spotifyAccess: $spotifyAccess")
-        val spotifyUser = apiClient.get()
-            .uri("/v1/me")
-            .accept(MediaType.APPLICATION_JSON)
-            .header("Authorization", "Bearer ${spotifyAccess.accessToken}")
-            .retrieve()
-            .body(String::class.java)
-            ?: error("Empty response from Spotify")
-
-        println("spotifyUser: $spotifyUser")
-        return SpotifyUser(
-            id = UUID.randomUUID(),
-            user = User(
-                id = UUID.randomUUID(),
-                email = "mail",
-                passwordHash = "",
-                role = Role.USER,
-                createdAt = OffsetDateTime.now(),
-                updatedAt = OffsetDateTime.now()
-            ),
-            spotifyId = "test",
-            accessToken = "aaa",
-            refreshToken = "aaa",
-            tokenExpirationTime = OffsetDateTime.now().plusHours(2),
-            scope = "test",
-            createdAt = OffsetDateTime.now(),
-            updatedAt = OffsetDateTime.now(),
-        )
-
-    }
-
-    private fun getAccess(spotifyAuthCode: SpotifyAuthCode): SpotifyAccess {
-        val form: MultiValueMap<String, String> = LinkedMultiValueMap<String, String>().apply {
-            add("client_id", appProps.clientId)
-            add("client_secret", appProps.clientSecret)
-            add("grant_type", "authorization_code")
-            add("code", spotifyAuthCode.code)
-            add("redirect_uri", "http://localhost:3000")
-        }
-
-        return accountClient.post()
-            .uri("/api/token")
-            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-            .accept(MediaType.APPLICATION_JSON)
-            .body(form)
-            .retrieve()
-            .body(SpotifyAccess::class.java)
-            ?: error("Empty response from Spotify")
-    }
+    private fun mapToSpotifyUser(
+        spotifyAccessRes: SpotifyAccessRes,
+        spotifyProfileRes: SpotifyProfileRes,
+        id: UUID? = null
+    ) = SpotifyUser(
+        id = id,
+        spotifyId = spotifyProfileRes.id,
+        role = if (spotifyProfileRes.product == "premium") Role.PREMIUM else Role.USER,
+        accessToken = spotifyAccessRes.accessToken,
+        refreshToken = spotifyAccessRes.refreshToken,
+        tokenExpirationTime = OffsetDateTime.now()
+            .plus(spotifyAccessRes.expiresIn.toLong(), ChronoUnit.SECONDS), // check unit and logic
+        scope = spotifyAccessRes.scope,
+        profileImageUrl = spotifyProfileRes.images.first { it.height > 100 }.url, //todo check for largest image
+    )
 
 
 }

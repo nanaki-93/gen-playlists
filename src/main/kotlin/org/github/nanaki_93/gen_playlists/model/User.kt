@@ -1,71 +1,99 @@
 package org.github.nanaki_93.gen_playlists.model
 
-import org.springframework.jdbc.core.RowMapper
-import java.sql.ResultSet
+import jakarta.persistence.*
 import java.time.OffsetDateTime
 import java.util.*
 
-
+@Entity
+@Table(name = "users")
 data class User(
+    @Id
+    @GeneratedValue
+    @Column(name = "user_id")
     val id: UUID? = null,
+
+    @Column(nullable = false, unique = true)
     val email: String,
+
+    @Column(name = "password_hash", nullable = false)
     val passwordHash: String,
-    val createdAt: OffsetDateTime? = null,
-    val updatedAt: OffsetDateTime? = null,
+
+    @Column(name = "created_at")
+    var createdAt: OffsetDateTime? = null,
+
+    @Column(name = "updated_at")
+    var updatedAt: OffsetDateTime? = null,
+
+    @OneToOne(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     val spotifyUser: SpotifyUser? = null,
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     val role: Role = Role.USER,
-)
+
+    @Column(name = "is_active", nullable = false)
+    val isActive: Boolean = true
+) {
+    @PrePersist
+    fun prePersist() {
+        if (createdAt == null) {
+            createdAt = OffsetDateTime.now()
+        }
+        updatedAt = createdAt
+    }
+}
 
 enum class Role {
     USER, PREMIUM
 }
 
-
-// Model for Spotify tokens, with a User relationship
+@Entity
+@Table(name = "spotify_users")
 data class SpotifyUser(
+    @Id
+    @GeneratedValue
+    @Column(name = "spotify_user_id")
     val id: UUID? = null,
+
+    @Column(name = "spotify_id", nullable = false, unique = true)
     val spotifyId: String,
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     val role: Role = Role.USER,
+
+    @Column(name = "access_token", nullable = false)
     val accessToken: String,
+
+    @Column(name = "refresh_token", nullable = false, columnDefinition = "TEXT")
     val refreshToken: String,
+
+    @Column(name = "token_expiration_time", nullable = false)
     val tokenExpirationTime: OffsetDateTime,
+
+    @Column(nullable = false)
     val scope: String,
-    val profileImageUrl: String, //take the biggest image in the list
-    val createdAt: OffsetDateTime? = null,
-    val updatedAt: OffsetDateTime? = null
-)
 
+    @Column(name = "profile_image_url", nullable = false)
+    val profileImageUrl: String,
 
-/**
- * --- RowMappers for Spring JDBC ---
- */
-object UserRowMapper : RowMapper<User> {
-    override fun mapRow(rs: ResultSet, rowNum: Int): User {
-        return User(
-            id = UUID.fromString(rs.getString("user_id")),
-            email = rs.getString("email"),
-            passwordHash = rs.getString("password_hash"),
-            role = Role.valueOf(rs.getString("role")),
-            createdAt = rs.getObject("created_at", OffsetDateTime::class.java),
-            updatedAt = rs.getObject("updated_at", OffsetDateTime::class.java)
-        )
+    @Column(name = "created_at")
+    var createdAt: OffsetDateTime? = null,
+
+    @Column(name = "updated_at")
+    var updatedAt: OffsetDateTime? = null,
+
+    @OneToOne
+    @JoinColumn(name = "spotify_user_id", referencedColumnName = "spotify_user_id")
+    val user: User? = null
+) {
+    @PrePersist
+    fun prePersist() {
+        if (createdAt == null) {
+            createdAt = OffsetDateTime.now()
+        }
+        updatedAt = createdAt
     }
 }
 
-object SpotifyUserRowMapper : RowMapper<SpotifyUser> {
-    override fun mapRow(rs: ResultSet, rowNum: Int): SpotifyUser {
-        return SpotifyUser(
-            id = UUID.fromString(rs.getString("spotify_user_id")),
-            spotifyId = rs.getString("spotify_id"),
-            role = Role.valueOf(rs.getString("role")),
-            accessToken = rs.getString("access_token"),
-            refreshToken = rs.getString("refresh_token"),
-            tokenExpirationTime = rs.getObject("token_expiration_time", OffsetDateTime::class.java),
-            scope = rs.getString("scope"),
-            profileImageUrl = rs.getString("profile_image_url"),
-            createdAt = rs.getObject("created_at", OffsetDateTime::class.java),
-            updatedAt = rs.getObject("updated_at", OffsetDateTime::class.java)
-        )
-    }
-}
 

@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
+import org.github.nanaki_93.gen_playlists.model.User
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
@@ -39,9 +40,9 @@ class JwtService(
             .signWith(signInKey)
             .compact()
 
-    fun isTokenValid(token: String, userDetails: UserDetails): Boolean {
+    fun isTokenValid(token: String, user: User): Boolean {
         val username = extractUsername(token)
-        return (username == userDetails.username) && !isTokenExpired(token)
+        return (username == user.email) && !isTokenExpired(token)
     }
 
     private fun isTokenExpired(token: String): Boolean =
