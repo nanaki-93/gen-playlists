@@ -4,11 +4,12 @@ import org.github.nanaki_93.gen_playlists.dto.CreateUserDto
 import org.github.nanaki_93.gen_playlists.dto.SpotifyUserDto
 import org.github.nanaki_93.gen_playlists.dto.UpdateUserDto
 import org.github.nanaki_93.gen_playlists.dto.UserDto
-import org.github.nanaki_93.gen_playlists.model.Role
-import org.github.nanaki_93.gen_playlists.model.SpotifyUser
-import org.github.nanaki_93.gen_playlists.model.User
+import org.github.nanaki_93.gen_playlists.model.*
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
+import java.time.OffsetDateTime
+import java.time.temporal.ChronoUnit
+import java.util.*
 
 @Component
 class UserMapper(
@@ -23,7 +24,7 @@ class UserMapper(
             role = user.role.name,
             isActive = user.isActive,
             createdAt = user.createdAt,
-            spotifyUser = user.spotifyUser?.let { toDto(it) }
+            spotifyUserId = user.spotifyUserId
         )
     }
 
@@ -45,7 +46,9 @@ class UserMapper(
             email = createUserDto.email,
             passwordHash = passwordEncoder?.encode(createUserDto.password)
                 ?: throw IllegalStateException("Password encoder not available"),
-            role = Role.valueOf(createUserDto.role.uppercase())
+            role = Role.valueOf(createUserDto.role.uppercase()),
+            isActive = createUserDto.isActive,
+            spotifyUserId = createUserDto.spotifyUserId
         )
     }
 
@@ -57,6 +60,22 @@ class UserMapper(
             updatedAt = java.time.OffsetDateTime.now()
         )
     }
+
+    fun toSpotifyUser(
+        spotifyAccessInfoRes: SpotifyAccessInfoRes,
+        spotifyProfileRes: SpotifyProfileRes,
+        id: UUID? = null
+    ) = SpotifyUser(
+        id = id,
+        spotifyId = spotifyProfileRes.id,
+        role = if (spotifyProfileRes.product == "premium") Role.PREMIUM else Role.USER,
+        accessToken = spotifyAccessInfoRes.accessToken,
+        refreshToken = spotifyAccessInfoRes.refreshToken,
+        tokenExpirationTime = OffsetDateTime.now()
+            .plus(spotifyAccessInfoRes.expiresIn.toLong(), ChronoUnit.SECONDS), // check unit and logic
+        scope = spotifyAccessInfoRes.scope,
+        profileImageUrl = spotifyProfileRes.images.first { it.height > 100 }.url, //todo check for largest image
+    )
 
 //    // Convert list of entities to DTOs
 //    fun toDtoList(users: List<User>): List<UserDto> {

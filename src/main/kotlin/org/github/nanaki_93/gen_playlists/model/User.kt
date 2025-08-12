@@ -24,8 +24,8 @@ data class User(
     @Column(name = "updated_at")
     var updatedAt: OffsetDateTime? = null,
 
-    @OneToOne(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    val spotifyUser: SpotifyUser? = null,
+    @Column(name = "spotify_user_id")
+    val spotifyUserId: UUID? = null,
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -83,10 +83,7 @@ data class SpotifyUser(
     @Column(name = "updated_at")
     var updatedAt: OffsetDateTime? = null,
 
-    @OneToOne
-    @JoinColumn(name = "spotify_user_id", referencedColumnName = "spotify_user_id")
-    val user: User? = null
-) {
+    ) {
     @PrePersist
     fun prePersist() {
         if (createdAt == null) {
@@ -94,6 +91,8 @@ data class SpotifyUser(
         }
         updatedAt = createdAt
     }
+
+
 }
 
 

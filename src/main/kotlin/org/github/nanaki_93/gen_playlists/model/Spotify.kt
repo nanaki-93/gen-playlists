@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming
 data class SpotifyAuthCode(val code: String)
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
-data class SpotifyAccessRes(
+data class SpotifyAccessInfoRes(
     val accessToken: String,
     val expiresIn: Int,
     val refreshToken: String,
