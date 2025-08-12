@@ -25,7 +25,7 @@ class AuthController(
 
     @PostMapping("/login")
     fun fromSpotify(@RequestBody spotifyCode: SpotifyAuthCode) = ResponseEntity.status(200)
-        .body(userMapper.toDto(spotifyAuthApi.login(spotifyCode)));
+        .body(userMapper.toDto(spotifyAuthApi.loginOrRegister(spotifyCode)));
 
 }
 
