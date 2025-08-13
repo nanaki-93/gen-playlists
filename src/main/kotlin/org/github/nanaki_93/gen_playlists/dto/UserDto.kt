@@ -26,6 +26,18 @@ data class SpotifyUserDto(
     val updatedAt: OffsetDateTime? = null,
 )
 
+data class SpotifyPlaylistDto(
+    val id: UUID? = null,
+    val spotifyId: String,
+    val collaborative: Boolean,
+    val name: String,
+    val description: String,
+    val apiHref: String,
+    val imageUrl: String,
+    val createdAt: OffsetDateTime? = null,
+    val updatedAt: OffsetDateTime? = null,
+)
+
 
 // For user registration/updates (without sensitive data)
 data class CreateUserDto(

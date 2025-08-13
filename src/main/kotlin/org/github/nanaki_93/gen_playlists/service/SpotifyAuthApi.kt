@@ -70,11 +70,11 @@ class SpotifyAuthApi(
             ?: error("Empty response from Spotify")
 
     private fun retrieveSpotifyProfile(spotifyUser: SpotifyUser) =
-        withRefreshToken(spotifyUser) {
+        withRefreshToken(spotifyUser) { currentUser ->
             apiClient.get()
                 .uri("/v1/me")
                 .accept(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer ${spotifyUser.accessToken}")
+                .header("Authorization", "Bearer ${currentUser.accessToken}")
                 .retrieve()
                 .body(SpotifyProfileRes::class.java)
                 ?: error("Empty response from Spotify")
@@ -108,11 +108,12 @@ class SpotifyAuthApi(
 
 
     fun <T> withRefreshToken(spotifyUser: SpotifyUser, operation: (SpotifyUser) -> T): T {
-        val currentUser = if (isAccessTokenExpired(spotifyUser)) {
+        var currentUser = spotifyUser
+        if (isAccessTokenExpired(spotifyUser)) {
             val refreshedTokens = refreshAccessToken(spotifyUser)
 
             // Save the updated user to database
-            spotifyUserRepository.save(
+            currentUser = spotifyUserRepository.save(
                 spotifyUser.copy(
                     accessToken = refreshedTokens.accessToken,
                     refreshToken = refreshedTokens.refreshToken,
@@ -120,8 +121,6 @@ class SpotifyAuthApi(
                     updatedAt = OffsetDateTime.now()
                 )
             )
-        } else {
-            spotifyUser
         }
         return operation(currentUser)
     }
