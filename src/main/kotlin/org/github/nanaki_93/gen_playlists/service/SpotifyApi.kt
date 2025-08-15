@@ -1,42 +1,38 @@
 package org.github.nanaki_93.gen_playlists.service
 
+import org.github.nanaki_93.gen_playlists.config.ApplicationProperties
 import org.github.nanaki_93.gen_playlists.model.SpotifyPageRes
+import org.github.nanaki_93.gen_playlists.model.SpotifyPlaylistDetailRes
 import org.github.nanaki_93.gen_playlists.model.SpotifyPlaylistRes
-import org.github.nanaki_93.gen_playlists.model.SpotifyUser
-import org.github.nanaki_93.gen_playlists.repository.SpotifyUserRepository
+import org.github.nanaki_93.gen_playlists.model.SpotifyUserRepository
 import org.springframework.core.ParameterizedTypeReference
-import org.springframework.http.MediaType
-import org.springframework.web.client.RestClient
+import org.springframework.stereotype.Service
 
-class SpotifyApi(private val spotifyAuthApi: SpotifyAuthApi, private val spotifyUserRepository: SpotifyUserRepository) {
 
-    private val apiClient = RestClient.builder()
-        .baseUrl("https://api.spotify.com")
-        .build()
+@Service
+class SpotifyApi(
+    appProps: ApplicationProperties,
+    spotifyUserRepository: SpotifyUserRepository
+) : BaseService(appProps, spotifyUserRepository) {
 
-    private fun retrieveSpotifyPlaylist(spotifyUser: SpotifyUser): SpotifyPageRes<SpotifyPlaylistRes> {
-        return spotifyAuthApi.withRefreshToken(spotifyUser) { currentUser ->
-            apiClient.get()
-                .uri("/v1/users/${currentUser.spotifyId}/playlists")
-                .accept(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer ${currentUser.accessToken}")
-                .retrieve()
-                .body(object : ParameterizedTypeReference<SpotifyPageRes<SpotifyPlaylistRes>>() {})
-                ?: error("Empty response from Spotify")
+
+    fun retrieveSpotifyPlaylistList(): SpotifyPageRes<SpotifyPlaylistRes> =
+        withRefreshToken { currentUser ->
+            callGet(
+                baseUrl = API_BASE_URL,
+                uri = "/v1/users/${currentUser.spotifyId}/playlists",
+                accessToken = currentUser.accessToken,
+                resType = object : ParameterizedTypeReference<SpotifyPageRes<SpotifyPlaylistRes>>() {}
+            )
         }
-    }
 
-    private fun retrieveSpotifyPlaylistDetail(spotifyUser: SpotifyUser): SpotifyPageRes<SpotifyPlaylistRes> {
-        return spotifyAuthApi.withRefreshToken(spotifyUser) { currentUser ->
-            apiClient.get()
-                .uri("/v1/users/${currentUser.spotifyId}/playlists")
-                .accept(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer ${currentUser.accessToken}")
-                .retrieve()
-                .body(object : ParameterizedTypeReference<SpotifyPageRes<SpotifyPlaylistRes>>() {})
-                ?: error("Empty response from Spotify")
+    fun retrieveSpotifyPlaylistDetail(playlistId: String): SpotifyPlaylistDetailRes =
+        withRefreshToken { currentUser ->
+            callGet(
+                baseUrl = API_BASE_URL,
+                uri = "v1/playlists/${playlistId}",
+                accessToken = currentUser.accessToken,
+                resType = object : ParameterizedTypeReference<SpotifyPlaylistDetailRes>() {}
+            )
         }
-    }
-
-
 }

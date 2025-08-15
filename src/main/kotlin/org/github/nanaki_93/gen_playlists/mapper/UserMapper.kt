@@ -9,7 +9,6 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
 import java.time.OffsetDateTime
 import java.time.temporal.ChronoUnit
-import java.util.*
 
 @Component
 class UserMapper(
@@ -22,19 +21,24 @@ class UserMapper(
             id = user.id,
             email = user.email,
             role = user.role.name,
-            isActive = user.isActive,
             createdAt = user.createdAt,
-            spotifyUserId = user.spotifyUserId
+            spotifyId = user.spotifyId
+        )
+    }
+
+    fun toCreateDto(email: String, spotifyId: String, toRegister: Boolean): CreateUserDto {
+        return CreateUserDto(
+            email = email,
+            password = "",
+            spotifyId = spotifyId,
+            toRegister = toRegister
         )
     }
 
     // Convert SpotifyUser entity to SpotifyUserDto (without sensitive tokens)
     fun toDto(spotifyUser: SpotifyUser): SpotifyUserDto {
         return SpotifyUserDto(
-            id = spotifyUser.id,
             spotifyId = spotifyUser.spotifyId,
-            role = spotifyUser.role.name,
-            profileImageUrl = spotifyUser.profileImageUrl,
             scope = spotifyUser.scope,
             createdAt = spotifyUser.createdAt
         )
@@ -46,9 +50,8 @@ class UserMapper(
             email = createUserDto.email,
             passwordHash = passwordEncoder?.encode(createUserDto.password)
                 ?: throw IllegalStateException("Password encoder not available"),
-            role = Role.valueOf(createUserDto.role.uppercase()),
-            isActive = createUserDto.isActive,
-            spotifyUserId = createUserDto.spotifyUserId
+            role = Role.USER,
+            spotifyId = createUserDto.spotifyId
         )
     }
 
@@ -64,18 +67,15 @@ class UserMapper(
     fun toSpotifyUser(
         spotifyAccessInfoRes: SpotifyAccessInfoRes,
         spotifyProfileRes: SpotifyProfileRes,
-        id: UUID? = null
     ) = SpotifyUser(
-        id = id,
         spotifyId = spotifyProfileRes.id,
-        role = if (spotifyProfileRes.product == "premium") Role.PREMIUM else Role.USER,
         accessToken = spotifyAccessInfoRes.accessToken,
         refreshToken = spotifyAccessInfoRes.refreshToken,
         tokenExpirationTime = OffsetDateTime.now()
             .plus(spotifyAccessInfoRes.expiresIn.toLong(), ChronoUnit.SECONDS), // check unit and logic
         scope = spotifyAccessInfoRes.scope,
-        profileImageUrl = spotifyProfileRes.images.first { it.height > 100 }.url, //todo check for largest image
     )
+
 
 //    // Convert list of entities to DTOs
 //    fun toDtoList(users: List<User>): List<UserDto> {

@@ -3,7 +3,7 @@ package org.github.nanaki_93.gen_playlists.security
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import org.github.nanaki_93.gen_playlists.repository.UserRepository
+import org.github.nanaki_93.gen_playlists.model.UserRepository
 import org.springframework.lang.NonNull
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.GrantedAuthority

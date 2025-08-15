@@ -1,8 +1,5 @@
 package org.github.nanaki_93.gen_playlists.dto
 
-import org.github.nanaki_93.gen_playlists.model.SpotifyProfileRes
-import org.github.nanaki_93.gen_playlists.model.SpotifyUser
-import org.github.nanaki_93.gen_playlists.model.User
 import java.time.OffsetDateTime
 import java.util.*
 
@@ -11,23 +8,24 @@ data class UserDto(
     val email: String,
     val createdAt: OffsetDateTime? = null,
     val updatedAt: OffsetDateTime? = null,
-    val spotifyUserId: UUID? = null,
+    val spotifyId: String? = null,
     val role: String,
     val isActive: Boolean = true
 )
 
 data class SpotifyUserDto(
-    val id: UUID? = null,
     val spotifyId: String,
-    val role: String,
     val scope: String,
-    val profileImageUrl: String,
     val createdAt: OffsetDateTime? = null,
     val updatedAt: OffsetDateTime? = null,
 )
 
+data class SpotifyPlaylistReqDto(
+    val spotifyId: String,
+    val playlistId: String,
+)
+
 data class SpotifyPlaylistDto(
-    val id: UUID? = null,
     val spotifyId: String,
     val collaborative: Boolean,
     val name: String,
@@ -43,32 +41,9 @@ data class SpotifyPlaylistDto(
 data class CreateUserDto(
     val email: String,
     val password: String,
-    val role: String = "USER",
-    val spotifyUserId: UUID? = null,
-    val isActive: Boolean = false
-) {
-    companion object {
-        fun existingUser(user: User): CreateUserDto {
-            return CreateUserDto(
-                email = user.email,
-                password = "",
-                spotifyUserId = user.spotifyUserId,
-                isActive = user.isActive,
-                role = user.role.name
-            )
-        }
-
-        fun registUser(profile: SpotifyProfileRes, spotifyUser: SpotifyUser): CreateUserDto {
-            return CreateUserDto(
-                email = profile.email,
-                password = "",
-                spotifyUserId = spotifyUser.id,
-                isActive = true,
-                role = spotifyUser.role.name
-            )
-        }
-    }
-}
+    val spotifyId: String? = null,
+    val toRegister: Boolean = false
+)
 
 data class UpdateUserDto(
     val email: String?,

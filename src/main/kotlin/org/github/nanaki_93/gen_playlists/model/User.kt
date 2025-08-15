@@ -1,6 +1,8 @@
 package org.github.nanaki_93.gen_playlists.model
 
 import jakarta.persistence.*
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.stereotype.Repository
 import java.time.OffsetDateTime
 import java.util.*
 
@@ -24,16 +26,14 @@ data class User(
     @Column(name = "updated_at")
     var updatedAt: OffsetDateTime? = null,
 
-    @Column(name = "spotify_user_id")
-    val spotifyUserId: UUID? = null,
+    @Column(name = "spotify_id")
+    val spotifyId: String? = null,
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     val role: Role = Role.USER,
 
-    @Column(name = "is_active", nullable = false)
-    val isActive: Boolean = true
-) {
+    ) {
     @PrePersist
     fun prePersist() {
         if (createdAt == null) {
@@ -50,17 +50,10 @@ enum class Role {
 @Entity
 @Table(name = "spotify_users")
 data class SpotifyUser(
-    @Id
-    @GeneratedValue
-    @Column(name = "spotify_user_id")
-    val id: UUID? = null,
 
+    @Id
     @Column(name = "spotify_id", nullable = false, unique = true)
     val spotifyId: String,
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    val role: Role = Role.USER,
 
     @Column(name = "access_token", nullable = false)
     val accessToken: String,
@@ -74,8 +67,8 @@ data class SpotifyUser(
     @Column(nullable = false)
     val scope: String,
 
-    @Column(name = "profile_image_url", nullable = false)
-    val profileImageUrl: String,
+    @Column(name = "playlist_list", columnDefinition = "VARCHAR(255)[]")
+    val playlistList: List<String> = emptyList(),
 
     @Column(name = "created_at")
     var createdAt: OffsetDateTime? = null,
@@ -94,5 +87,14 @@ data class SpotifyUser(
 
 
 }
+
+@Repository
+interface UserRepository : JpaRepository<User, UUID> {
+    fun findByEmail(email: String): User?
+}
+
+
+@Repository
+interface SpotifyUserRepository : JpaRepository<SpotifyUser, String>
 
 
