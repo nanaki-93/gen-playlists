@@ -7,6 +7,7 @@ import org.github.nanaki_93.gen_playlists.model.SpotifyPlaylistRes
 import org.github.nanaki_93.gen_playlists.model.SpotifyUserRepository
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.stereotype.Service
+import org.springframework.util.LinkedMultiValueMap
 
 
 @Service
@@ -16,11 +17,15 @@ class SpotifyApi(
 ) : BaseService(appProps, spotifyUserRepository) {
 
 
-    fun retrieveSpotifyPlaylistList(): SpotifyPageRes<SpotifyPlaylistRes> =
+    fun retrieveSpotifyPlaylistList(limit: String, offset: String): SpotifyPageRes<SpotifyPlaylistRes> =
         withRefreshToken { currentUser ->
             callGet(
                 baseUrl = API_BASE_URL,
-                uri = "/v1/users/${currentUser.spotifyId}/playlists",
+                uri = "/me/playlists",
+                params = LinkedMultiValueMap<String, String>().apply {
+                    add("limit", limit)
+                    add("offset", offset)
+                },
                 accessToken = currentUser.accessToken,
                 resType = object : ParameterizedTypeReference<SpotifyPageRes<SpotifyPlaylistRes>>() {}
             )

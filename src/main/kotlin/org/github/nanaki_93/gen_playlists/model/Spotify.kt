@@ -35,7 +35,10 @@ data class SpotifyOwnerRes(
 )
 
 data class SpotifyPlaylistRes(
-    val apiHref: String,
+    val name: String,
+    val description: String,
+    val images: List<SpotifyImage>,
+    val id: String,
 )
 
 data class SpotifyPlaylistDetailRes(

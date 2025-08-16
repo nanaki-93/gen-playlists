@@ -36,28 +36,29 @@ abstract class BaseService(
         OffsetDateTime.now().isAfter(spotifyUser.tokenExpirationTime)
 
     fun <T> callGet(
-        baseUrl: String, uri: String, accessToken: String, resType: ParameterizedTypeReference<T>
-    ): T {
-        return RestClient.builder().baseUrl(baseUrl).build().get()
-            .uri(uri)
-            .accept(MediaType.APPLICATION_JSON)
-            .header("Authorization", "Bearer $accessToken")
-            .retrieve()
-            .body(resType)
-            ?: error("Empty response from Spotify")
-    }
+        baseUrl: String, uri: String, accessToken: String, resType: ParameterizedTypeReference<T>,params: MultiValueMap<String, String> = LinkedMultiValueMap()
+    ): T = RestClient.builder().baseUrl(baseUrl).build().get()
+        .uri(withParam(uri, params))
+        .accept(MediaType.APPLICATION_JSON)
+        .header("Authorization", "Bearer $accessToken")
+        .retrieve()
+        .body(resType)
+        ?: error("Empty response from Spotify")
 
     fun <T> callPost(
         baseUrl: String, uri: String, form: MultiValueMap<String, String>, resType: Class<T>
-    ): T {
-        return RestClient.builder().baseUrl(baseUrl).build().post()
-            .uri(uri)
-            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-            .accept(MediaType.APPLICATION_JSON)
-            .body(form)
-            .retrieve()
-            .body(resType)
-            ?: error("Empty response from Spotify")
+    ): T = RestClient.builder().baseUrl(baseUrl).build().post()
+        .uri(uri)
+        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+        .accept(MediaType.APPLICATION_JSON)
+        .body(form)
+        .retrieve()
+        .body(resType)
+        ?: error("Empty response from Spotify")
+
+    private fun withParam(uri: String, params: MultiValueMap<String, String>): String {
+        if (params.isEmpty()) return uri
+        return "$uri?${params.toSingleValueMap().map { "${it.key}=${it.value}" }.joinToString("&")}"
     }
 
     fun getSpotifyAccessInfoRes(form: MultiValueMap<String, String>) =
