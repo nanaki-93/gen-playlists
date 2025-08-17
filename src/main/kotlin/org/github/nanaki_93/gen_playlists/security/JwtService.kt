@@ -35,7 +35,6 @@ class JwtService(
         Jwts.builder()
             .claims(extraClaims)
             .subject(user.email)
-            .claim("spotifyId", user.spotifyId)
             .issuedAt(Date(System.currentTimeMillis()))
             .expiration(Date(System.currentTimeMillis() + jwtExpiration))
             .signWith(signInKey)

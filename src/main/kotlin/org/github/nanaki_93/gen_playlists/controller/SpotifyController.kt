@@ -6,12 +6,10 @@ import org.github.nanaki_93.gen_playlists.service.SpotifyApi
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
-@RestController("/api/gen-playlists")
+@RestController
+@RequestMapping("/api/gen-playlists")
 class SpotifyController(private val spotifyApi: SpotifyApi) {
     private val logger = LoggerFactory.getLogger(this::class.java)
 

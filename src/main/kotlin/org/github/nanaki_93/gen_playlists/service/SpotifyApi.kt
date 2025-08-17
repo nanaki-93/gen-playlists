@@ -21,7 +21,7 @@ class SpotifyApi(
         withRefreshToken { currentUser ->
             val callGet = callGet(
                 baseUrl = API_BASE_URL,
-                uri = "/me/playlists",
+                uri = "/v1/me/playlists",
                 params = LinkedMultiValueMap<String, String>().apply {
                     add("limit", limit)
                     add("offset", offset)

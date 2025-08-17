@@ -2,6 +2,8 @@ package org.github.nanaki_93.gen_playlists.model
 
 import jakarta.persistence.*
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Repository
 import java.time.OffsetDateTime
 import java.util.*
@@ -33,13 +35,25 @@ data class User(
     @Column(nullable = false)
     val role: Role = Role.USER,
 
-    ) {
+    ) : UserDetails {
     @PrePersist
     fun prePersist() {
         if (createdAt == null) {
             createdAt = OffsetDateTime.now()
         }
         updatedAt = createdAt
+    }
+
+    override fun getAuthorities(): Collection<GrantedAuthority?> {
+        return listOf(GrantedAuthority { role.name })
+    }
+
+    override fun getPassword(): String {
+        return passwordHash
+    }
+
+    override fun getUsername(): String {
+        return email
     }
 }
 

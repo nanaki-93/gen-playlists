@@ -14,13 +14,17 @@ class UserAuthService(
 ) : UserDetailsService {
 
     override fun loadUserByUsername(username: String?): UserDetails? {
-        return toUserDetail(userRepository.findByEmail(username ?: "") ?: throw IllegalStateException("User not found"))
+        return userRepository.findByEmail(username ?: "") ?: throw IllegalStateException("User not found")
     }
 
     fun toUserDetail(user: User): UserDetails {
         return org.springframework.security.core.userdetails.User(
             user.email,
             user.passwordHash,
+            true,
+            true,
+            true,
+            true,
             mutableListOf<GrantedAuthority>(SimpleGrantedAuthority(user.role.name))
         )
     }

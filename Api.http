@@ -1,7 +1,7 @@
 ### GET request to example server
-GET http://127.0.0.1:8080/api/gen-playlists/playlists?limit=10&offset=0
+GET http://127.0.0.1:8080/api/gen-playlists/playlists?limit=10&offset=1
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbmRyZW9zZS5tYXJjbzkzQGdtYWlsLmNvbSIsInNwb3RpZnlJZCI6IjExNzA2NTY4NDMiLCJpYXQiOjE3NTUzODkwOTIsImV4cCI6MTc1NTM5MjY5Mn0.O9xRfRM7Hk6B2zJchLq3FTDE9ioyYO6fQ0J8EwS1LZQKP0qjS9hR5ZFpoZOHFT3NfIDURdolkOkbgN7V8POXQg
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbmRyZW9zZS5tYXJjbzkzQGdtYWlsLmNvbSIsImlhdCI6MTc1NTQyMDMzOSwiZXhwIjoxNzU1NDIzOTM5fQ.BmGLFAbcfbnAv9NB9ZYMMBkFut9PwKprxlH-9Nzmh5zZoDZV0kn2t3V3tEz5IzR5jEpu70GJgJfW7F4OsZRcvA
 
 ###
 
@@ -13,8 +13,9 @@ Authorization: Bearer pippo
 ###
 
 ### GET request to example server
-GET http://127.0.0.1:8080/api/v1/auth/callback
+GET https://api.spotify.com/v1/me/playlists
 Accept: application/json
+Authorization: Bearer BQAEcP3GNX4bTy0KFVPBFiOJJHMxS77eW0fzizH11DHdYvgc25oWGThah_utYtO9LTEJ6HHDlBthCM9UR89ow94eTqYdAvfcsq5RnKRVTcNpKTCjc_cvMPeuMTNpXwox4L_9VeY_D-aLH8gVewstdbWCMAEAd9eJ8Hx5ZSpeEGyz1JKTzT6nd6WBKHzpEClwO9EFh_xGqXnrLFpVobZw957OjEZWvrpasFik6NqIJw
 
 ###
 
@@ -32,6 +33,8 @@ redirectUri = {{redirectUri}}
 
 
 ###
+
+
 
 
 ###

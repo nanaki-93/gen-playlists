@@ -34,8 +34,7 @@ class SecurityConfig(
             .authorizeHttpRequests { auth ->
                 auth
                     // Allow unauthenticated access to authentication endpoints
-                    .requestMatchers("/api/**").permitAll()
-//                    .requestMatchers("/api/v1/auth/**").permitAll()
+                    .requestMatchers("/api/v1/auth/**").permitAll()
                     // All other requests require authentication
                     .anyRequest().authenticated()
             }
