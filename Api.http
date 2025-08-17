@@ -1,10 +1,22 @@
 ### GET request to example server
-GET http://127.0.0.1:8080/hello
+GET http://127.0.0.1:8080/api/gen-playlists/playlists?limit=10&offset=0
 Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbmRyZW9zZS5tYXJjbzkzQGdtYWlsLmNvbSIsInNwb3RpZnlJZCI6IjExNzA2NTY4NDMiLCJpYXQiOjE3NTUzODkwOTIsImV4cCI6MTc1NTM5MjY5Mn0.O9xRfRM7Hk6B2zJchLq3FTDE9ioyYO6fQ0J8EwS1LZQKP0qjS9hR5ZFpoZOHFT3NfIDURdolkOkbgN7V8POXQg
 
 ###
 
+### GET request to example server
+GET http://127.0.0.1:8080/api/gen-playlists/playlists
+Accept: application/json
+Authorization: Bearer pippo
 
+###
+
+### GET request to example server
+GET http://127.0.0.1:8080/api/v1/auth/callback
+Accept: application/json
+
+###
 
 
 ### Exchange code for token (form-urlencoded)

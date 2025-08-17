@@ -19,4 +19,7 @@ class UserService(
             userMapper.toDto(userRepository.save(userMapper.toEntity(createUserDto)))
         }
 
+
+    fun getUserByEmail(email: String) = userRepository.findByEmail(email)
+
 }

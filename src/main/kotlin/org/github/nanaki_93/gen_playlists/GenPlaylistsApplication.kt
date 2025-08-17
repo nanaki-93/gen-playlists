@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
 
 @EnableConfigurationProperties(ApplicationProperties::class)
-@SpringBootApplication
+@SpringBootApplication // Adjust to your base package
 class GenPlaylistsApplication
 
 fun main(args: Array<String>) {

@@ -19,7 +19,7 @@ class SpotifyApi(
 
     fun retrieveSpotifyPlaylistList(limit: String, offset: String): SpotifyPageRes<SpotifyPlaylistRes> =
         withRefreshToken { currentUser ->
-            callGet(
+            val callGet = callGet(
                 baseUrl = API_BASE_URL,
                 uri = "/me/playlists",
                 params = LinkedMultiValueMap<String, String>().apply {
@@ -29,6 +29,8 @@ class SpotifyApi(
                 accessToken = currentUser.accessToken,
                 resType = object : ParameterizedTypeReference<SpotifyPageRes<SpotifyPlaylistRes>>() {}
             )
+            println("to Spotify:$callGet")
+            callGet
         }
 
     fun retrieveSpotifyPlaylistDetail(playlistId: String): SpotifyPlaylistDetailRes =

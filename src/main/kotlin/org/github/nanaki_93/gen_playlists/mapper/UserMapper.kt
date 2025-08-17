@@ -12,7 +12,7 @@ import java.time.temporal.ChronoUnit
 
 @Component
 class UserMapper(
-    private val passwordEncoder: PasswordEncoder? = null
+    private val passwordEncoder: PasswordEncoder
 ) {
 
     // Convert User entity to UserDto

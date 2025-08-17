@@ -25,24 +25,25 @@ class JwtService(
         return claimsResolver(claims)
     }
 
-    fun generateToken(userDetails: UserDetails): String =
-        generateToken(emptyMap(), userDetails)
+    fun generateToken(user: User): String =
+        generateToken(emptyMap(), user)
 
     fun generateToken(
         extraClaims: Map<String, Any>,
-        userDetails: UserDetails
+        user: User
     ): String =
         Jwts.builder()
             .claims(extraClaims)
-            .subject(userDetails.username)
+            .subject(user.email)
+            .claim("spotifyId", user.spotifyId)
             .issuedAt(Date(System.currentTimeMillis()))
             .expiration(Date(System.currentTimeMillis() + jwtExpiration))
             .signWith(signInKey)
             .compact()
 
-    fun isTokenValid(token: String, user: User): Boolean {
+    fun isTokenValid(token: String, user: UserDetails): Boolean {
         val username = extractUsername(token)
-        return (username == user.email) && !isTokenExpired(token)
+        return (username == user.username) && !isTokenExpired(token)
     }
 
     private fun isTokenExpired(token: String): Boolean =

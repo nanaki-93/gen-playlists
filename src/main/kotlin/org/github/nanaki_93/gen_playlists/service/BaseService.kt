@@ -20,6 +20,8 @@ abstract class BaseService(
     private val spotifyUserRepository: SpotifyUserRepository,
 ) {
 
+    private val logger = org.slf4j.LoggerFactory.getLogger(this::class.java)
+
     companion object {
         const val ACCOUNT_BASE_URL = "https://accounts.spotify.com"
         const val API_BASE_URL = "https://api.spotify.com"
@@ -36,7 +38,11 @@ abstract class BaseService(
         OffsetDateTime.now().isAfter(spotifyUser.tokenExpirationTime)
 
     fun <T> callGet(
-        baseUrl: String, uri: String, accessToken: String, resType: ParameterizedTypeReference<T>,params: MultiValueMap<String, String> = LinkedMultiValueMap()
+        baseUrl: String,
+        uri: String,
+        accessToken: String,
+        resType: ParameterizedTypeReference<T>,
+        params: MultiValueMap<String, String> = LinkedMultiValueMap()
     ): T = RestClient.builder().baseUrl(baseUrl).build().get()
         .uri(withParam(uri, params))
         .accept(MediaType.APPLICATION_JSON)
@@ -61,13 +67,12 @@ abstract class BaseService(
         return "$uri?${params.toSingleValueMap().map { "${it.key}=${it.value}" }.joinToString("&")}"
     }
 
-    fun getSpotifyAccessInfoRes(form: MultiValueMap<String, String>) =
-        callPost(
-            baseUrl = ACCOUNT_BASE_URL,
-            uri = "/api/token",
-            form = form,
-            resType = SpotifyAccessInfoRes::class.java
-        )
+    fun getSpotifyAccessInfoRes(form: MultiValueMap<String, String>): SpotifyAccessInfoRes = callPost(
+        baseUrl = ACCOUNT_BASE_URL,
+        uri = "/api/token",
+        form = form,
+        resType = SpotifyAccessInfoRes::class.java
+    )
 
     private fun refreshAccessToken(spotifyUser: SpotifyUser) =
         getSpotifyAccessInfoRes(LinkedMultiValueMap<String, String>().apply {
@@ -85,6 +90,7 @@ abstract class BaseService(
     private fun refreshAndSaveUser(user: SpotifyUser): SpotifyUser =
         refreshAccessToken(user)
             .let { refreshedTokens ->
+                logger.info("Refreshed tokens : $refreshedTokens")
                 spotifyUserRepository.save(
                     user.copy(
                         accessToken = refreshedTokens.accessToken,

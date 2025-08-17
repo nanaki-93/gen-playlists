@@ -1,12 +1,18 @@
 package org.github.nanaki_93.gen_playlists.config;
 
 import org.github.nanaki_93.gen_playlists.security.JwtAuthenticationFilter
+import org.github.nanaki_93.gen_playlists.service.UserAuthService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.security.config.Customizer
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.AuthenticationProvider
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.web.cors.CorsConfiguration
@@ -16,19 +22,31 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 @Configuration
 @EnableWebSecurity
 class SecurityConfig(
-    private val jwtAuthFilter: JwtAuthenticationFilter,
+    private val jwtAuthenticationFilter: JwtAuthenticationFilter,
+    private val userAuthService: UserAuthService,
 ) {
+
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
-            .cors(Customizer.withDefaults())
-            .csrf { it.disable() }
+            .csrf { csrf -> csrf.disable() } // Disable CSRF for stateless API
+            .cors { cors -> cors.configurationSource(corsConfigurationSource()) } // Configure CORS
             .authorizeHttpRequests { auth ->
-                auth.requestMatchers("/api/v1/auth/**").permitAll()
+                auth
+                    // Allow unauthenticated access to authentication endpoints
+                    .requestMatchers("/api/**").permitAll()
+//                    .requestMatchers("/api/v1/auth/**").permitAll()
+                    // All other requests require authentication
                     .anyRequest().authenticated()
             }
-            .sessionManagement { session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter::class.java)
+            // Configure session management to be stateless
+            .sessionManagement { session ->
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            }
+            .authenticationProvider(authenticationProvider())
+            // Add the JWT authentication filter before the UsernamePasswordAuthenticationFilter
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
+
         return http.build()
     }
 
@@ -46,5 +64,24 @@ class SecurityConfig(
         source.registerCorsConfiguration("/**", config)
         return source
     }
+
+    @Bean
+    fun passwordEncoder(): PasswordEncoder {
+        return BCryptPasswordEncoder()
+    }
+
+    @Bean
+    fun authenticationProvider(): AuthenticationProvider {
+        val authProvider = DaoAuthenticationProvider(userAuthService)
+        authProvider.setPasswordEncoder(passwordEncoder())
+        return LoggingAuthProvider(authProvider)
+    }
+
+    @Bean
+    fun authenticationManager(config: AuthenticationConfiguration): AuthenticationManager {
+
+        return config.authenticationManager
+    }
+
 
 }
