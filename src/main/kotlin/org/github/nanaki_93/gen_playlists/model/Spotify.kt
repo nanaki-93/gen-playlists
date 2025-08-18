@@ -2,8 +2,6 @@ package org.github.nanaki_93.gen_playlists.model
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
-import java.time.OffsetDateTime
-import java.util.*
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class SpotifyPageRes<T>(
@@ -49,52 +47,56 @@ data class SpotifyPlaylistRes(
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class SpotifyPlaylistDetailRes(
-    val owner: SpotifyOwnerRes,
-    val collaborative: Boolean,
-    val name: String,
-    val description: String,
-    val apiHref: String,
-    val images: List<SpotifyImage>,
-    val tracks: SpotifyPageRes<SpotifyTrackRes>
+    val owner: SpotifyOwnerRes?,
+    val collaborative: Boolean?,
+    val name: String?,
+    val description: String?,
+    val apiHref: String?,
+    val images: List<SpotifyImage>?,
+    val tracks: SpotifyPageRes<SpotifyTrackWrapperRes>?
+)
+
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
+data class SpotifyTrackWrapperRes(
+    val track: SpotifyTrackRes?
 )
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class SpotifyTrackRes(
-    val name: String,
-    val album: SpotifyAlbumRes,
-    val artists: List<SpotifyArtistRes>,
-    val explicit: Boolean,
-    val externalUrls: Map<String, String>,
-    val href: String,
-    val id: String,
-    val uri: String,
-    val type: String,
-    val isLocal: Boolean,
-    val discNumber: Int,
-    val trackNumber: Int,
-    val durationMs: Int,
-    val popularity: Int,
+    val name: String?,
+    val album: SpotifyAlbumRes?,
+    val artists: List<SpotifyArtistRes>?,
+    val explicit: Boolean?,
+    val externalUrls: Map<String, String>?,
+    val href: String?,
+    val id: String?,
+    val uri: String?,
+    val type: String?,
+    val isLocal: Boolean?,
+    val discNumber: Int?,
+    val trackNumber: Int?,
+    val durationMs: Int?,
+    val popularity: Int?,
     val previewUrl: String? = null,
 )
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class SpotifyAlbumRes(
-    val id: UUID,
-    val name: String,
-    val albumType: String,
-    val totalTracks: Int,
-    val artists: List<SpotifyArtistRes>,
-    val releaseDate: OffsetDateTime,
-    val images: List<SpotifyImage>,
-    val externalUrls: Map<String, String>,
-    val href: String,
-    val uri: String,
-    val type: String,
+    val name: String?,
+    val albumType: String?,
+    val totalTracks: Int?,
+    val artists: List<SpotifyArtistRes>?,
+    val releaseDate: String?,
+    val images: List<SpotifyImage>?,
+    val externalUrls: Map<String, String>?,
+    val href: String?,
+    val uri: String?,
+    val type: String?,
 )
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class SpotifyArtistRes(
-    val id: String,
-    val name: String,
+    val id: String?,
+    val name: String?,
 )
 

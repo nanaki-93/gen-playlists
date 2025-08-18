@@ -18,6 +18,10 @@ Accept: application/json
 Authorization: Bearer BQAEcP3GNX4bTy0KFVPBFiOJJHMxS77eW0fzizH11DHdYvgc25oWGThah_utYtO9LTEJ6HHDlBthCM9UR89ow94eTqYdAvfcsq5RnKRVTcNpKTCjc_cvMPeuMTNpXwox4L_9VeY_D-aLH8gVewstdbWCMAEAd9eJ8Hx5ZSpeEGyz1JKTzT6nd6WBKHzpEClwO9EFh_xGqXnrLFpVobZw957OjEZWvrpasFik6NqIJw
 
 ###
+GET http://localhost:8080/api/gen-playlists/playlist/1YcUHK6cKXlR8hsVm9JX8r
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbmRyZW9zZS5tYXJjbzkzQGdtYWlsLmNvbSIsImlhdCI6MTc1NTU0NTM3NywiZXhwIjoxNzU1NTQ4OTc3fQ.rzYv6RwCB6SQ3ljIoJJ0UWRMzfvRCkj_uJzMU9PjCVR_ovHtR6tp73H-ldVwEylXpz-hd3TextHH4ZxPwL2Blw
+
 
 
 ### Exchange code for token (form-urlencoded)
