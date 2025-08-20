@@ -1,10 +1,10 @@
-package org.github.nanaki_93.gen_playlists.mapper
+package org.github.nanaki_93.gen_playlists_be.mapper
 
-import org.github.nanaki_93.gen_playlists.dto.CreateUserDto
-import org.github.nanaki_93.gen_playlists.dto.SpotifyUserDto
-import org.github.nanaki_93.gen_playlists.dto.UpdateUserDto
-import org.github.nanaki_93.gen_playlists.dto.UserDto
-import org.github.nanaki_93.gen_playlists.model.*
+import org.github.nanaki_93.gen_playlists_be.dto.CreateUserDto
+import org.github.nanaki_93.gen_playlists_be.dto.SpotifyUserDto
+import org.github.nanaki_93.gen_playlists_be.dto.UpdateUserDto
+import org.github.nanaki_93.gen_playlists_be.dto.UserDto
+import org.github.nanaki_93.gen_playlists_be.model.*
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
 import java.time.OffsetDateTime

@@ -1,4 +1,4 @@
-package org.github.nanaki_93.gen_playlists.model
+package org.github.nanaki_93.gen_playlists_be.model
 
 import jakarta.persistence.*
 import org.springframework.data.jpa.repository.JpaRepository

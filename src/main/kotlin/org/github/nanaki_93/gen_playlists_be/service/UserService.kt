@@ -1,8 +1,8 @@
-package org.github.nanaki_93.gen_playlists.service
+package org.github.nanaki_93.gen_playlists_be.service
 
-import org.github.nanaki_93.gen_playlists.dto.CreateUserDto
-import org.github.nanaki_93.gen_playlists.mapper.UserMapper
-import org.github.nanaki_93.gen_playlists.model.UserRepository
+import org.github.nanaki_93.gen_playlists_be.dto.CreateUserDto
+import org.github.nanaki_93.gen_playlists_be.mapper.UserMapper
+import org.github.nanaki_93.gen_playlists_be.model.UserRepository
 import org.springframework.stereotype.Service
 
 @Service

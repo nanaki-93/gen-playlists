@@ -18,9 +18,15 @@ java {
 
 repositories {
     mavenCentral()
+    maven {
+        name = "SciJava"
+        url = uri("https://maven.scijava.org/content/groups/public/")
+    }
+
 }
 
 dependencies {
+
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-data-rest")
@@ -28,6 +34,11 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("cisd:jhdf5:19.04.0")
+    implementation("com.opencsv:opencsv:5.7.1")
+    implementation("org.slf4j:slf4j-simple:1.7.36")
+
+
 
     implementation("io.jsonwebtoken:jjwt-api:0.12.5")
     implementation("io.jsonwebtoken:jjwt-impl:0.12.5")

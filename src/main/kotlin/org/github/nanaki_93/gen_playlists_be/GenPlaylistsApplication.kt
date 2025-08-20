@@ -1,6 +1,6 @@
-package org.github.nanaki_93.gen_playlists
+package org.github.nanaki_93.gen_playlists_be
 
-import org.github.nanaki_93.gen_playlists.config.ApplicationProperties
+import org.github.nanaki_93.gen_playlists_be.config.ApplicationProperties
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication

@@ -1,1 +1,1 @@
-rootProject.name = "gen-playlists"
+rootProject.name = "gen-playlists-be"

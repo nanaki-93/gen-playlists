@@ -1,4 +1,4 @@
-package org.github.nanaki_93.gen_playlists.model
+package org.github.nanaki_93.gen_playlists_be.model
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming

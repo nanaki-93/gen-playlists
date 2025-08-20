@@ -1,8 +1,8 @@
-package org.github.nanaki_93.gen_playlists.controller
+package org.github.nanaki_93.gen_playlists_be.controller
 
-import org.github.nanaki_93.gen_playlists.model.SpotifyPageRes
-import org.github.nanaki_93.gen_playlists.model.SpotifyPlaylistRes
-import org.github.nanaki_93.gen_playlists.service.SpotifyApi
+import org.github.nanaki_93.gen_playlists_be.model.SpotifyPageRes
+import org.github.nanaki_93.gen_playlists_be.model.SpotifyPlaylistRes
+import org.github.nanaki_93.gen_playlists_be.service.SpotifyApi
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

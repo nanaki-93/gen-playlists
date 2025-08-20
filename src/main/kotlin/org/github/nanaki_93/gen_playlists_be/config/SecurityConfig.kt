@@ -1,7 +1,7 @@
-package org.github.nanaki_93.gen_playlists.config;
+package org.github.nanaki_93.gen_playlists_be.config;
 
-import org.github.nanaki_93.gen_playlists.security.JwtAuthenticationFilter
-import org.github.nanaki_93.gen_playlists.service.UserAuthService
+import org.github.nanaki_93.gen_playlists_be.security.JwtAuthenticationFilter
+import org.github.nanaki_93.gen_playlists_be.service.UserAuthService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager

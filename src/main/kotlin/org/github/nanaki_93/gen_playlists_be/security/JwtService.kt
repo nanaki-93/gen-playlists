@@ -1,10 +1,10 @@
-package org.github.nanaki_93.gen_playlists.security
+package org.github.nanaki_93.gen_playlists_be.security
 
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
-import org.github.nanaki_93.gen_playlists.model.User
+import org.github.nanaki_93.gen_playlists_be.model.User
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service

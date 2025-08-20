@@ -1,7 +1,7 @@
-package org.github.nanaki_93.gen_playlists.service
+package org.github.nanaki_93.gen_playlists_be.service
 
-import org.github.nanaki_93.gen_playlists.model.User
-import org.github.nanaki_93.gen_playlists.model.UserRepository
+import org.github.nanaki_93.gen_playlists_be.model.User
+import org.github.nanaki_93.gen_playlists_be.model.UserRepository
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails

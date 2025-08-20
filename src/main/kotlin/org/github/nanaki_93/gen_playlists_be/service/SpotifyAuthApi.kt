@@ -1,9 +1,9 @@
-package org.github.nanaki_93.gen_playlists.service
+package org.github.nanaki_93.gen_playlists_be.service
 
-import org.github.nanaki_93.gen_playlists.config.ApplicationProperties
-import org.github.nanaki_93.gen_playlists.dto.CreateUserDto
-import org.github.nanaki_93.gen_playlists.mapper.UserMapper
-import org.github.nanaki_93.gen_playlists.model.*
+import org.github.nanaki_93.gen_playlists_be.config.ApplicationProperties
+import org.github.nanaki_93.gen_playlists_be.dto.CreateUserDto
+import org.github.nanaki_93.gen_playlists_be.mapper.UserMapper
+import org.github.nanaki_93.gen_playlists_be.model.*
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.stereotype.Service
 import org.springframework.util.LinkedMultiValueMap

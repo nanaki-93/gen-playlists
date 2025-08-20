@@ -1,12 +1,12 @@
-package org.github.nanaki_93.gen_playlists.security
+package org.github.nanaki_93.gen_playlists_be.security
 
 import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletResponse
-import org.github.nanaki_93.gen_playlists.dto.CreateUserDto
-import org.github.nanaki_93.gen_playlists.dto.UserDto
-import org.github.nanaki_93.gen_playlists.mapper.UserMapper
-import org.github.nanaki_93.gen_playlists.model.User
-import org.github.nanaki_93.gen_playlists.service.UserService
+import org.github.nanaki_93.gen_playlists_be.dto.CreateUserDto
+import org.github.nanaki_93.gen_playlists_be.dto.UserDto
+import org.github.nanaki_93.gen_playlists_be.mapper.UserMapper
+import org.github.nanaki_93.gen_playlists_be.model.User
+import org.github.nanaki_93.gen_playlists_be.service.UserService
 import org.springframework.core.MethodParameter
 import org.springframework.http.MediaType
 import org.springframework.http.converter.HttpMessageConverter

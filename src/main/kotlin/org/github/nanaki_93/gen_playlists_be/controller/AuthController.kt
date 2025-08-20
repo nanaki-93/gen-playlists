@@ -1,11 +1,11 @@
-package org.github.nanaki_93.gen_playlists.controller
+package org.github.nanaki_93.gen_playlists_be.controller
 
 
-import org.github.nanaki_93.gen_playlists.dto.CreateUserDto
-import org.github.nanaki_93.gen_playlists.dto.UserDto
-import org.github.nanaki_93.gen_playlists.model.SpotifyAuthCode
-import org.github.nanaki_93.gen_playlists.service.SpotifyAuthApi
-import org.github.nanaki_93.gen_playlists.service.UserService
+import org.github.nanaki_93.gen_playlists_be.dto.CreateUserDto
+import org.github.nanaki_93.gen_playlists_be.dto.UserDto
+import org.github.nanaki_93.gen_playlists_be.model.SpotifyAuthCode
+import org.github.nanaki_93.gen_playlists_be.service.SpotifyAuthApi
+import org.github.nanaki_93.gen_playlists_be.service.UserService
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

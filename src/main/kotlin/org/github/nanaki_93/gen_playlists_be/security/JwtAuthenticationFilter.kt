@@ -1,9 +1,9 @@
-package org.github.nanaki_93.gen_playlists.security
+package org.github.nanaki_93.gen_playlists_be.security
 
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import org.github.nanaki_93.gen_playlists.service.UserAuthService
+import org.github.nanaki_93.gen_playlists_be.service.UserAuthService
 import org.springframework.lang.NonNull
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder

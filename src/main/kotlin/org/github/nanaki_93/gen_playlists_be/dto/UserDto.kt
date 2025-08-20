@@ -1,4 +1,4 @@
-package org.github.nanaki_93.gen_playlists.dto
+package org.github.nanaki_93.gen_playlists_be.dto
 
 import java.time.OffsetDateTime
 import java.util.*

@@ -1,4 +1,4 @@
-package org.github.nanaki_93.gen_playlists.config
+package org.github.nanaki_93.gen_playlists_be.config
 
 import org.slf4j.LoggerFactory
 import org.springframework.security.authentication.AuthenticationProvider

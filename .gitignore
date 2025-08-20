@@ -40,3 +40,4 @@ out/
 .kotlin
 **/application.properties
 **/http-client.private.env.json
+/src/test/resources/data/

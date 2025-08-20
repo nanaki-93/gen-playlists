@@ -1,10 +1,10 @@
-package org.github.nanaki_93.gen_playlists.service
+package org.github.nanaki_93.gen_playlists_be.service
 
-import org.github.nanaki_93.gen_playlists.config.ApplicationProperties
-import org.github.nanaki_93.gen_playlists.model.SpotifyAccessInfoRes
-import org.github.nanaki_93.gen_playlists.model.SpotifyUser
-import org.github.nanaki_93.gen_playlists.model.SpotifyUserRepository
-import org.github.nanaki_93.gen_playlists.model.User
+import org.github.nanaki_93.gen_playlists_be.config.ApplicationProperties
+import org.github.nanaki_93.gen_playlists_be.model.SpotifyAccessInfoRes
+import org.github.nanaki_93.gen_playlists_be.model.SpotifyUser
+import org.github.nanaki_93.gen_playlists_be.model.SpotifyUserRepository
+import org.github.nanaki_93.gen_playlists_be.model.User
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.MediaType
 import org.springframework.security.core.context.SecurityContextHolder

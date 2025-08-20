@@ -1,10 +1,10 @@
-package org.github.nanaki_93.gen_playlists.service
+package org.github.nanaki_93.gen_playlists_be.service
 
-import org.github.nanaki_93.gen_playlists.config.ApplicationProperties
-import org.github.nanaki_93.gen_playlists.model.SpotifyPageRes
-import org.github.nanaki_93.gen_playlists.model.SpotifyPlaylistDetailRes
-import org.github.nanaki_93.gen_playlists.model.SpotifyPlaylistRes
-import org.github.nanaki_93.gen_playlists.model.SpotifyUserRepository
+import org.github.nanaki_93.gen_playlists_be.config.ApplicationProperties
+import org.github.nanaki_93.gen_playlists_be.model.SpotifyPageRes
+import org.github.nanaki_93.gen_playlists_be.model.SpotifyPlaylistDetailRes
+import org.github.nanaki_93.gen_playlists_be.model.SpotifyPlaylistRes
+import org.github.nanaki_93.gen_playlists_be.model.SpotifyUserRepository
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.stereotype.Service
 import org.springframework.util.LinkedMultiValueMap
